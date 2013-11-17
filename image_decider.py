@@ -3,27 +3,31 @@ import urllib2
 import json
 
 class weather(object):
-	zip_code = "http://api.wunderground.com/api/%s/geolookup/q/%s.json"
-
-	def __init__():
+	def __init__(self):
 		config = parse_config()
 		self.api = config.get("Weather", "api_key")
-		self.url = "http://api.wunderground.com/api/"
+		self.zip = config.get("Weather", "zip_code")
+		self.url = "http://api.wunderground.com/api/%s" %self.api
 		self.forecast = []
 		self.location = self.get_location()
 
-	def update_weather():
-		f = urllib2.urlopen('http://api.wunderground.com/api/749d42017bcd5650/geolookup/conditions/q/IA/Cedar_Rapids.json')
-		json_string = f.read()
-		parsed_json = json.loads(json_string)
-		location = parsed_json['location']['city']
-		temp_f = parsed_json['current_observation']['temp_f']
-
-	def get_weather():
+	def weather(self):
 		pass
 
-	def get_location():
+	def update_forecast(self):
+		url = self.url + "/hourly/q/%s.json" % self.location
+		f = urllib2.urlopen(url)
+		json_string = f.read()
+		parsed_json = json.loads(json_string)
+		for item in parsed_json["hourly_forecast"]:
+			self.forecast.append((item["FCTTIME"]["hour"], item["condition"]))
+
+	def get_location(self):
 		if hasattr(self, "location"):
 			return self.location
 		else:
-			pass
+			url = self.url + "/geolookup/q/%s.json" % self.zip
+			f = urllib2.urlopen(url)
+			json_string = f.read()
+			parsed_json = json.loads(json_string)
+			self.location = parsed_json["location"]["wmo"]
