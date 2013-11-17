@@ -15,11 +15,12 @@ def change_background():
 	background="file:///" + picture
 	subprocess.call(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', background]) #Change the picture
 
-config = parse_config()
-path = config.get("Settings", "image_folder")
+if __name__ == "__main__":
+	config = parse_config()
+	path = config.get("Settings", "image_folder")
 
-# main loop
-while 1:
-	change_background()
-	wait = 60 - datetime.datetime.today().time().minute #Calculate how long to wait
-	time.sleep(wait*60)
+	# main loop
+	while 1:
+		change_background()
+		wait = 60 - datetime.datetime.today().time().minute #Calculate how long to wait
+		time.sleep(wait*60)
