@@ -13,7 +13,6 @@ def change_background():
 if __name__ == "__main__":
 	config = parse_config()
 	path = config.get("Settings", "image_folder")
-	print path
 	# main loop
 	while 1:
 		change_background()
